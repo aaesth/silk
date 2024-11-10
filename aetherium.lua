@@ -16,7 +16,6 @@ local defaultJumpPower = 50
 local player = game.Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
-local player = game.Players.LocalPlayer
 local usernameCheckURL = "https://raw.githubusercontent.com/aaesth/files/refs/heads/main/pastebinauth"
 
 local function isUsernameInFile()
@@ -65,14 +64,14 @@ home:Label({
 
 if isUsernameInFile() then
     print("add dev to home page")
-	home:Label({
-		Text = "You have developer access"
-	})
+    home:Label({
+        Text = "You have developer access"
+    })
 else
     print("e")
-	home:Label({
-		Text = "Couldn't verify your account so you dont have developer access"
-	})
+    home:Label({
+        Text = "Couldn't verify your account so you don't have developer access"
+    })
 end
 
 local FPSLabel = home:Label()
@@ -82,8 +81,6 @@ RunService.RenderStepped:Connect(function(v)
     FPSLabel.Text = "FPS: " .. math.round(1 / v)
     TimeLabel.Text = "The time is " .. DateTime.now():FormatLocalTime("dddd h:mm:ss A", "en-us")
 end)
-
-Window:ShowTab(home)
 
 -- Create Player tab and check for issues
 local playerTabSuccess, PlayerTab = pcall(function()
@@ -169,7 +166,43 @@ ServerTab:Button({
     end,
 })
 
--- Debug menu tab
+local gamespecific = Window:CreateTab({
+    Name = "Games"
+})
+
+local jjj = gamespecific:CollapsingHeader({
+    Title = "Natural Disaster"
+})
+
+jjj:Label({
+    Text = "test"
+})
+
+jjj:Button({
+    Text = "Teleport to Spawn",
+    Callback = function(self)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-313, 180, 372)
+    end,
+})
+
+jjj:Button({
+    Text = "Teleport to Map",
+    Callback = function(self)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-132, 48, 5)
+    end,
+})
+
+jjj:Button({
+    Text = "Autofarm",
+    Callback = function(self, Value)
+        while Value do
+            wait(5)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-290, 178, 379)
+            game.Players.LocalPlayer.Character.Humanoid.Jump = true
+        end
+    end,
+})
+
 local ExampleTab2 = Window:CreateTab({
     Name = "Settings"
 })
@@ -186,4 +219,5 @@ ExampleTab2:Keybind({
     end,
 })
 
+Window:ShowTab(home)
 print("GUI setup complete.")
