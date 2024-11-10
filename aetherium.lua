@@ -1,4 +1,3 @@
-
 print("Running Aetherium v0.00-DEBUG")
 
 -- Load ImGui library and check if it's successful
@@ -11,12 +10,37 @@ if not success then
     return
 end
 print("ImGui library loaded successfully.")
+
 local defaultWalkSpeed = 16
 local defaultJumpPower = 50
 local player = game.Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService")
+local player = game.Players.LocalPlayer
+local usernameCheckURL = "https://raw.githubusercontent.com/aaesth/files/refs/heads/main/pastebinauth"
+
+local function isUsernameInFile()
+    local success, result = pcall(function()
+        return game:HttpGet(usernameCheckURL)
+    end)
+    
+    if success then
+        local usernames = string.split(result, "\n")
+        for _, username in ipairs(usernames) do
+            if username == player.Name then
+                print("dev")
+                return true
+            end
+        end
+        print("not dev")
+        return false
+    else
+        warn("Failed to fetch usernames file: " .. tostring(result))
+        return false
+    end
+end
 
 -- Create main window and check if ImGui methods work
-local function finishedkey()
 local windowSuccess, Window = pcall(function()
     return ImGui:CreateWindow({
         Title = "Aetherium 0.00-DEBUG 81124",
@@ -32,12 +56,32 @@ end
 print("Window created successfully.")
 
 local home = Window:CreateTab({
-	Name = "Home",
-	Visible = false 
+    Name = "Home",
+    Visible = false 
 })
 home:Label({
-	Text = "Hello, " .. game.Players.LocalPlayer.Name
+    Text = "Hello, " .. player.Name
 })
+
+if isUsernameInFile() then
+    print("add dev to home page")
+	home:Label({
+		Text = "You have developer access"
+	})
+else
+    print("e")
+	home:Label({
+		Text = "Couldn't verify your account so you dont have developer access"
+	})
+end
+
+local FPSLabel = home:Label()
+local TimeLabel = home:Label()
+
+RunService.RenderStepped:Connect(function(v)
+    FPSLabel.Text = "FPS: " .. math.round(1 / v)
+    TimeLabel.Text = "The time is " .. DateTime.now():FormatLocalTime("dddd h:mm:ss A", "en-us")
+end)
 
 Window:ShowTab(home)
 
@@ -61,22 +105,20 @@ PlayerTab:Label({
 })
 
 local Header = PlayerTab:CollapsingHeader({
-	Title = "Movement"
+    Title = "Movement"
 })
 
 Header:Label({
     Text = "Movement Settings"
 })
 
-
 -- WalkSpeed slider
 Header:ProgressSlider({
     Label = "Walkspeed",
     Format = "%.d/%s", 
-    Value = defaultWalkSpeed,  -- Set the initial WalkSpeed on the slider
+    Value = defaultWalkSpeed,
     MinValue = 1,
     MaxValue = 128,
-
     Callback = function(self, wsvalue)
         if player.Character and player.Character:FindFirstChild("Humanoid") then
             player.Character.Humanoid.WalkSpeed = wsvalue
@@ -89,10 +131,9 @@ Header:ProgressSlider({
 Header:ProgressSlider({
     Label = "JumpPower",
     Format = "%.d/%s", 
-    Value = defaultJumpPower,  -- Set the initial JumpPower
+    Value = defaultJumpPower,
     MinValue = 1,
     MaxValue = 128,
-
     Callback = function(self, jpvalue)
         if player.Character and player.Character:FindFirstChild("Humanoid") then
             player.Character.Humanoid.JumpPower = jpvalue
@@ -102,7 +143,7 @@ Header:ProgressSlider({
 })
 
 local ServerTab = PlayerTab:CollapsingHeader({
-	Title = "Server"
+    Title = "Server"
 })
 
 -- Server tab content
@@ -138,43 +179,11 @@ ExampleTab2:Label({
 })
 
 ExampleTab2:Keybind({
-	Label = "Toggle UI",
-	Value = Enum.KeyCode.P,
-	Callback = function()
-		Window:SetVisible(not Window.Visible)
-	end,
+    Label = "Toggle UI",
+    Value = Enum.KeyCode.P,
+    Callback = function()
+        Window:SetVisible(not Window.Visible)
+    end,
 })
 
 print("GUI setup complete.")
-end
-
-local KeySystem = ImGui:CreateWindow({
-	Title = "Key system",
-	TabsBar = false,
-	AutoSize = "Y",
-	NoCollapse = true,
-	NoResize = true,
-	NoClose = true
-})
-	
-local Content = KeySystem:CreateTab({
-	Visible = true
-})
-
-local Key = Content:InputText({
-	Label = "Key",
-	PlaceHolder = "Key here",
-	Value = "",
-})
-
-Content:Button({
-	Text = "Enter",
-	Callback = function()
-		if Key:GetValue() == "a" then
-			KeySystem:Close()
-			finishedkey()
-		else
-			Key:SetLabel("Wrong key!")
-		end
-	end,
-})
