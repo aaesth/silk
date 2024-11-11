@@ -203,6 +203,13 @@ jjj:Button({
     end,
 })
 
+jjj:Button({
+    Text = "Teleport unanchored parts",
+    Callback = function(self, Value)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/aaesth/aetherium/refs/heads/main/tpua.lua", true))()
+    end,
+})
+
 local ExampleTab2 = Window:CreateTab({
     Name = "Settings"
 })
