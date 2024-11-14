@@ -1,6 +1,5 @@
 print("Running Aetherium v0.00-DEBUG")
 
--- Load ImGui library and check if it's successful
 local success, ImGui = pcall(function()
     return loadstring(game:HttpGet('https://github.com/depthso/Roblox-ImGUI/raw/main/ImGui.lua'))()
 end)
@@ -39,7 +38,6 @@ local function isUsernameInFile()
     end
 end
 
--- Create main window and check if ImGui methods work
 local windowSuccess, Window = pcall(function()
     return ImGui:CreateWindow({
         Title = "Aetherium 0.00-DEBUG 81124",
@@ -82,7 +80,6 @@ RunService.RenderStepped:Connect(function(v)
     TimeLabel.Text = "The time is " .. DateTime.now():FormatLocalTime("dddd h:mm:ss A", "en-us")
 end)
 
--- Create Player tab and check for issues
 local playerTabSuccess, PlayerTab = pcall(function()
     return Window:CreateTab({
         Name = "Player",
@@ -96,7 +93,6 @@ if not playerTabSuccess or not PlayerTab then
 end
 print("Player tab created successfully.")
 
--- Player tab content
 PlayerTab:Label({
     Text = "This is the player tab"
 })
@@ -109,7 +105,6 @@ Header:Label({
     Text = "Movement Settings"
 })
 
--- WalkSpeed slider
 Header:ProgressSlider({
     Label = "Walkspeed",
     Format = "%.d/%s", 
@@ -124,7 +119,6 @@ Header:ProgressSlider({
     end,
 })
 
--- JumpPower slider
 Header:ProgressSlider({
     Label = "JumpPower",
     Format = "%.d/%s", 
@@ -143,12 +137,10 @@ local ServerTab = PlayerTab:CollapsingHeader({
     Title = "Server"
 })
 
--- Server tab content
 ServerTab:Label({
     Text = "Server"
 })
 
--- Rejoin server button
 ServerTab:Button({
     Text = "Rejoin server",
     Callback = function(self)
@@ -157,7 +149,6 @@ ServerTab:Button({
     end,
 })
 
--- Lowest player server hop button
 ServerTab:Button({
     Text = "Lowest player server hop",
     Callback = function(self)
