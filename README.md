@@ -1,6 +1,7 @@
-# silk
+# silk FE
 awful roblox script, used to be aetherium
 <br>
+this is old, the new script is a ss script and is closed source
 <br>
 old aetherium build
 <br>
